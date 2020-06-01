@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import CircleButton from '../elements/CircleButton';
 
+
 class MemoDetailScreen extends React.Component {
   render() {
     return(
@@ -23,7 +24,7 @@ class MemoDetailScreen extends React.Component {
           <Text>講座のアイディアです</Text>
         </View>
 
-        <CircleButton color='white' style={styles.editButton}>X</CircleButton>
+        <CircleButton name="pencil"color='white' style={styles.editButton} />
       </View>
     );
   }
