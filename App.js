@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Appbar from './src/components/Appbar';
-import MemoListScreen from './src/screens/MemoListScreen';
+import MemoListScreen from './src/screens/MemoEditScreen';
 
 export default function App() {
   return (
