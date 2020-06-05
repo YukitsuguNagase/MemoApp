@@ -1,17 +1,52 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import * as firebase from 'firebase';
 import CircleButton from '../elements/CircleButton';
 
 class LoginScreen extends React.Component {
+
+  state = {
+    email: '',
+    password: '',
+  }
+
+  handleSubmit() {
+    firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
+    .then((user) =>{
+      console.log('success',user);
+      this.props.navigation.navigate('Home');
+    })
+    .catch((error) =>{
+      console.log(error);
+    });
+    //() => {this.props.navigation.navigate('Home')}
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>
           Login
         </Text>
-        <TextInput style={styles.input} value="Email address" />
-        <TextInput style={styles.input} value="Password" />
-        <TouchableHighlight style={styles.button}onPress={() => {this.props.navigation.navigate('Home')}} underlayColor="#c70f66">
+        <TextInput
+          style={styles.input}
+          value={this.state.email}
+          onChangeText={(text) => { this.setState({ email: text });}}
+          autoCapitalize="none"
+          autoCoect= {false}
+          placeholder="Email Address"
+           />
+        <TextInput
+          style={styles.input}
+          value={this.state.password}
+          onChangeText={(text) => { this.setState({ password: text });}}
+          autoCapitalize="none"
+          autoCoect= {false}
+          placeholder="Password"
+          secureTextEntry
+           />
+        <TouchableHighlight style={styles.button}onPress={this.handleSubmit.bind(this)} underlayColor="#c70f66">
           <Text style={styles.buttonTitle}>Send</Text>
         </TouchableHighlight>
       </View>
