@@ -17,7 +17,7 @@ class MemoListScreen extends React.Component {
       const memoList = [];
       dbMemolist.forEach((doc) => {
         //console.log(doc.data());
-        memoList.push(doc.data());
+        memoList.push({ ...doc.data(), key: doc.id });
       });
       this.setState({ memoList : memoList});
     })
