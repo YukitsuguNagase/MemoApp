@@ -1,14 +1,21 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight, FlatList } from 'react-native';
 
+
+const dateString = (date) => {
+  if (date == null) { return ''; }//並列処理時のぬるぽエラー回避目的
+  const str = date.toDate().toISOString();
+  return str.split('T')[0];
+};
+
 class MemoList extends React.Component {
   renderMemo({item}) {
     console.log(item);
     return(
-      <TouchableHighlight onPress={() => { this.props.navigation.navigate('MemoDetail'); }}>
+      <TouchableHighlight onPress={() => { this.props.navigation.navigate('MemoDetail', { memo : item }); }}>
         <View style={styles.memoListItem}>
-        <Text style={styles.memoTitle}>{item.body}</Text>
-        <Text style={styles.memoDate}>2020/00/11</Text>
+        <Text style={styles.memoTitle}>{item.body ? item.body.substring(0, 10) : ''}</Text>
+        <Text style={styles.memoDate}>{dateString(item.createdOn)}</Text>
         </View>
       </TouchableHighlight>
     );

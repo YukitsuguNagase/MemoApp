@@ -13,7 +13,7 @@ class MemoCreateScreen extends React.Component {
     console.log(currentUser.uid);
     db.collection(`users/${ currentUser.uid }/memos`).add({
       body:this.state.body,
-      createdOn: new Date(),
+      createdOn: firebase.firestore.Timestamp.now(),
     })
     .then((docRef) => {
       console.log(docRef.id);
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 
   memoEditInput: {
-    backgroundColor: '#ddd',
+    backgroundColor: '#fffde6',
     flex: 1,
     paddingTop: 32,
     paddingLeft: 16,

@@ -1,18 +1,60 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput,KeyboardAvoidingView } from 'react-native';
+import * as firebase from 'firebase';
 import CircleButton from '../elements/CircleButton';
 
 class MemoEditScreen extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <TextInput style={styles.memoEditInput} multiline value="Hi" />
-
-        <CircleButton name="check"/>
-
-      </View>
-    );
+  state= {
+    body:'',
+    key:'',
   }
+  componentDidMount() {
+    //console.log(this.props.navigation.state.params);
+    const { params } = this.props.navigation.state;
+    this.setState({body: params.memo.body, key: params.memo.key});
+  }
+
+  handlePress() {
+   const db = firebase.firestore();
+   const { currentUser } = firebase.auth();
+   // returnMemo に渡すので new Date() ではなくて firestore の Timestamp 型を直接使う
+   const newDate = firebase.firestore.Timestamp.now();
+   const docRef = db.collection(`users/${currentUser.uid}/memos`).doc(this.state.key);
+   docRef
+     .update({
+       body: this.state.body,
+       createdOn: newDate,
+     })
+     .then(() => {
+       this.setState({ body: this.state.body }); // WORKAROUND: bodyもここで更新しておく
+       const { navigation } = this.props;
+       navigation.state.params.returnMemo({
+         body: this.state.body,
+         key: this.state.key,
+         createdOn: newDate,
+       });
+       navigation.goBack();
+     })
+     .catch((error) => {
+       global.console.log(error);
+     });
+ }
+
+ render() {
+   return (
+     <KeyboardAvoidingView style={styles.container} behavior="height" keyboardVerticalOffset={80}>
+       <TextInput
+         style={styles.memoEditInput}
+         multiline
+         value={this.state.body}
+         onChangeText={(text) => { this.setState({ body: text }); }}
+         underlineColorAndroid="transparent"
+         textAlignVertical="top"
+       />
+       <CircleButton name="check" onPress={this.handlePress.bind(this)} />
+     </KeyboardAvoidingView>
+   );
+ }
 }
 
 const styles = StyleSheet.create({
@@ -22,7 +64,7 @@ const styles = StyleSheet.create({
   },
 
   memoEditInput: {
-    backgroundColor: '#ddd',
+    backgroundColor: '#fffde6',
     flex: 1,
     paddingTop: 32,
     paddingLeft: 16,

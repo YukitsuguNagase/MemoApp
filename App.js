@@ -12,6 +12,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import MemoCreateScreen from './src/screens/MemoCreateScreen';
 
+
 require("firebase/firestore");
 
 const firebaseConfig = {

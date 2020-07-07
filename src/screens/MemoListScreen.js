@@ -4,6 +4,8 @@ import * as firebase from 'firebase';
 import MemoList from '../components/MemoList';
 import CircleButton from '../elements/CircleButton';
 //this.props.navigation.navigate('MemoEdit');
+
+
 class MemoListScreen extends React.Component {
   state = {
     memoList: [],
@@ -12,7 +14,14 @@ class MemoListScreen extends React.Component {
   componentDidMount(){
     const { currentUser } = firebase.auth();
     firebase.firestore().collection(`users/${ currentUser.uid }/memos`)
-    .get()
+    .onSnapshot((snapshot) => {
+      const memoList = [];
+      snapshot.forEach((doc) => {
+        memoList.push({ ...doc.data(), key: doc.id });
+      });
+      this.setState({ memoList : memoList});
+    });
+/*    .get()
     .then((dbMemolist) => {
       const memoList = [];
       dbMemolist.forEach((doc) => {
@@ -23,7 +32,7 @@ class MemoListScreen extends React.Component {
     })
     .catch((error) => {
       console.log(error);
-    });
+    });*/
 
   }
   handlePress() {
