@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
 import * as firebase from 'firebase';
+import { StackActions, NavigationActions } from 'react-navigation';
 import CircleButton from '../elements/CircleButton';
 
 class SignupScreen extends React.Component {
@@ -11,11 +12,16 @@ class SignupScreen extends React.Component {
 
   handleSubmit() {
     firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
-    .then((user) =>{
-      this.props.navigation.navigate('Home');
+    .then(() =>{
+      const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Home' })
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);this.props.navigation.navigate('Home');
     })
-    .catch((error) =>{
-      console.log(error);
+    .catch(() =>{
     });
     //() => {this.props.navigation.navigate('Home')}
   }

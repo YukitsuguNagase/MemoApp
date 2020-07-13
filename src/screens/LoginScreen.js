@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableHighlight, TouchableOpacity } from 'react-native';
 import * as firebase from 'firebase';
+import { StackActions, NavigationActions } from 'react-navigation';
 import CircleButton from '../elements/CircleButton';
 
 class LoginScreen extends React.Component {
@@ -12,16 +13,23 @@ class LoginScreen extends React.Component {
 
   handleSubmit() {
     firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password)
-    .then((user) =>{
-      console.log(user);
-      this.props.navigation.navigate('Home');
+    .then(() =>{
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Home' })
+        ],
+      });
+      this.props.navigation.dispatch(resetAction);
     })
-    .catch((error) =>{
-      console.log(error);
+    .catch(() =>{
     });
     //() => {this.props.navigation.navigate('Home')}
   }
 
+  handlePress() {
+    this.props.navigation.navigate('Signup');
+  }
 
   render() {
     return (
@@ -49,6 +57,10 @@ class LoginScreen extends React.Component {
         <TouchableHighlight style={styles.button}onPress={this.handleSubmit.bind(this)} underlayColor="#c70f66">
           <Text style={styles.buttonTitle}>Send</Text>
         </TouchableHighlight>
+
+        <TouchableOpacity style={styles.signUp} onPress={this.handlePress.bind(this)}>
+          <Text style={styles.signUpText}>SignUp</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -89,6 +101,14 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: '#fff',
     fontSize: 18,
+  },
+
+  signUp: {
+    marginTop: 16,
+    alignSelf: 'center',
+  },
+  signUpText: {
+    fontSize: 16,
   },
 });
 
