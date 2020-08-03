@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as firebase from 'firebase';
+import { ConfirmDialog } from 'react-native-simple-dialogs';
 import CircleButton from '../elements/CircleButton';
 
 const dateString = (date) => {
@@ -9,24 +11,39 @@ const dateString = (date) => {
 };
 
 
+
 class MemoDetailScreen extends React.Component {
   state = {
     memo: {},
+    dialogVisible: false,
   }
 
   componentDidMount() {
     const { params } = this.props.navigation.state;
-    this.setState({ memo: params.memo});
-    //console.log(params.memo);
+    this.setState({ memo: params.memo, key: params.key});
+    console.log('init',params.memo);
   }
 
   returnMemo(memo) {
     this.setState({ memo })
   }
 
+  trashMemo(){
+    const db = firebase.firestore();
+    const { currentUser } = firebase.auth();
+    const { navigation } = this.props;
+    this.setState({ dialogVisible: false });
+    db.collection(`users/${currentUser.uid}/memos`).doc(this.state.memo.key).delete().then(function() {
+    console.log("Document successfully deleted!");
+    navigation.goBack();
+    }).catch(function(error) {
+    console.error("Error removing document: ", error);
+    });
+  }
 
   render() {
     const { memo } = this.state;
+
     if (memo == null) { return null; }
     console.log({memo});
     return(
@@ -56,6 +73,32 @@ class MemoDetailScreen extends React.Component {
          style={styles.editButton}
          onPress={() => { this.props.navigation.navigate('MemoEdit', { memo,returnMemo: this.returnMemo.bind(this) });}}
          />
+
+         <CircleButton
+          name="trash"
+          color='gray'
+          style={styles.trushButton}
+          onPress={() => this.setState({ dialogVisible: true })}
+          //onPress={() => { this.props.navigation.navigate('MemoEdit', { memo,returnMemo: this.returnMemo.bind(this) });}}
+          />
+
+          <ConfirmDialog
+                    title="Confirmation"
+                    message="delete it?"
+                    visible={this.state.dialogVisible}
+                    onTouchOutside={() => this.setState({ dialogVisible: false })}
+                    positiveButton={{
+                        title: 'Yes',
+                        onPress: () => {
+                          this.trashMemo()
+                        }
+                    }}
+                    negativeButton={{
+                        title: 'No',
+                        onPress: () => this.setState({ dialogVisible: false })
+                    }}
+                // overlayStyle={{ backgroundColor:"#eee"}}
+                />
       </View>
     );
   }

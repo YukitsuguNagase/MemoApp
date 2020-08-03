@@ -8,6 +8,7 @@ const CustomIcon = createIconSet({
   pencil: '\uf303',
   plus: '\uf067',
   check: '\uf00c',
+  trash: '\uf2ed',
 }, 'FontAwesome');
 
 class CircleButton extends React.Component {
@@ -31,6 +32,11 @@ class CircleButton extends React.Component {
     if (color === 'white') {
       bgColor = '#fff';
       textColor = '#e31676';
+    }
+
+    if (color === 'gray') {
+      bgColor = '#999';
+      textColor = '#fff';
     }
 
     return (
