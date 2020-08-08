@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "Memo_app",
-    "slug": "Memo_app",
+    "name": "MEMMA",
+    "description": "A simple memo app!",
+    "slug": "Memoapp",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -22,7 +23,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.memoapp.firebase",
+      "buildNumber": "1.0.0"
     }
   }
 }
