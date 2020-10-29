@@ -2,9 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
 import * as firebase from 'firebase';
 import { StackActions, NavigationActions } from 'react-navigation';
+import { AdMobBanner } from 'expo-ads-admob';
 import CircleButton from '../elements/CircleButton';
 
 class SignupScreen extends React.Component {
+  bannerError() {
+   console.log("Ad Fail error")
+ }
+
   state = {
     email: '',
     password: '',
@@ -50,6 +55,17 @@ class SignupScreen extends React.Component {
         <TouchableHighlight style={styles.button}onPress={this.handleSubmit.bind(this)} underlayColor="#c70f66">
           <Text style={styles.buttonTitle}>Register</Text>
         </TouchableHighlight>
+
+        <AdMobBanner
+          style={styles.banner}
+          adUnitID={
+            Platform.select({
+              ios: "ca-app-pub-5272689534978231/8069821890" , // iOS
+            })
+          }
+          onDidFailToReceiveAdWithError={this.bannerError}
+        />
+
       </View>
     );
   }

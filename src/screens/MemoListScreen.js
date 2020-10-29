@@ -21,18 +21,7 @@ class MemoListScreen extends React.Component {
       });
       this.setState({ memoList : memoList});
     });
-/*    .get()
-    .then((dbMemolist) => {
-      const memoList = [];
-      dbMemolist.forEach((doc) => {
-        //console.log(doc.data());
-        memoList.push({ ...doc.data(), key: doc.id });
-      });
-      this.setState({ memoList : memoList});
-    })
-    .catch((error) => {
-      console.log(error);
-    });*/
+
 
   }
   handlePress() {

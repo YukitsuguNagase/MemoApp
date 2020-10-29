@@ -40,6 +40,7 @@ const App = createStackNavigator(
   {
     defaultNavigationOptions: {
       headerTitle: 'MEMMA',
+      headerBackTitle: null,
       headerStyle: {
         backgroundColor: '#265366',
       },
